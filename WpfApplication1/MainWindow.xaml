@@ -1,0 +1,13 @@
+﻿<Window x:Class="KeyboardMouseActivity.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid Margin="0,0,-8,-52">
+        <Button Content="Disable keyboard" HorizontalAlignment="Left" Margin="48,230,0,0" VerticalAlignment="Top" Width="174" Click="Button_Click" Height="47"/>
+        <Button Content="Disable mouse" HorizontalAlignment="Left" Margin="266,230,0,0" VerticalAlignment="Top" Width="141" Height="47" Click="Button_Click_1"/>
+        <Button Content="Enable keyboard" HorizontalAlignment="Left" Margin="48,146,0,0" VerticalAlignment="Top" Width="174" Height="42" Click="Button_Click_2"/>
+        <Button Content="Enable mouse" HorizontalAlignment="Left" Margin="266,146,0,0" VerticalAlignment="Top" Width="141" Height="42" Click="Button_Click_3"/>
+        <Label Content="Press esc anytime to enable keyboard and mouse" HorizontalAlignment="Left" Height="29" Margin="95,78,0,0" VerticalAlignment="Top" Width="274"/>
+
+    </Grid>
+</Window>
