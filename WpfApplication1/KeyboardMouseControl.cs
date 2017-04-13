@@ -79,6 +79,8 @@ namespace KeyboardMouseActivity
             }
         }
 
+
+        //as mousekeydown event is suppressed,there is no chance of mouseup event occuring.
         private void HookManager_MouseUp(object sender, MouseEventArgs e)
         {
             Console.WriteLine(e.Button.ToString() + " Released");
@@ -116,7 +118,7 @@ namespace KeyboardMouseActivity
             keyFlag = 0;
 
             Console.WriteLine("enabling key");
-           // initializeHooks();
+           
         }
 
         public void mouseDisable()
@@ -135,7 +137,7 @@ namespace KeyboardMouseActivity
             mouseFlag = 0;
 
             Console.WriteLine("enabling mouse");
-            // initializeHooks();
+            
         }
 
 
