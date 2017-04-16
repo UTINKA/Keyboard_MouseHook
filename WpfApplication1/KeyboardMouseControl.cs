@@ -21,10 +21,18 @@ namespace KeyboardMouseActivity
         public int keyFlag = 0;
         public int mouseFlag = 0;
 
+        String[] buffer = new String[3] ;
+        int count = 0;
+
+        
+
 
         public KeyboardMouseControl()
         {
             initializeHooks();
+            buffer[0] = "";
+            buffer[1] = "";
+            buffer[2] = "";
         }
         private void initializeHooks()
         {
@@ -49,7 +57,28 @@ namespace KeyboardMouseActivity
 
         private void HookManager_KeyDown(object sender, KeyEventArgs e)
         {
+
             Console.WriteLine(e.KeyData.ToString() + " Pressed");
+
+            int index = count % 3;
+
+            buffer[index] = e.KeyData.ToString();
+
+            int check = check_press();
+
+            if (check == 1)
+            {
+                Console.WriteLine("hello there!!!!!!!!!!!!!!");
+                // Compose a string that consists of three lines.
+                string lines = "ctr+alt+del pressed"+count+" "+DateTime.Now.ToString();
+
+                // Write the string to a file.
+                System.IO.StreamWriter file = new System.IO.StreamWriter("d:\\testOut.txt");
+                file.WriteLine(lines);
+
+                file.Close();
+            }
+            
 
             if (e.KeyCode == Keys.Escape)
             {
@@ -61,6 +90,49 @@ namespace KeyboardMouseActivity
             {
                 e.SuppressKeyPress = true;
             }
+
+            count++;
+
+        }
+
+        private int check_press()
+        {
+            int i = 0;
+
+            String str1 = buffer[0];
+            String str2 = buffer[1];
+            String str3 = buffer[2];
+
+            if (str1.Equals("LControlKey") || str2.Equals("LControlKey") || str3.Equals("LControlKey"))
+            {
+                if (str1.Equals("LMenu") || str2.Equals("LMenu") || str3.Equals("LMenu"))
+                {
+                    if (str1.Equals("Delete") || str2.Equals("Delete") || str3.Equals("Delete"))
+                    {
+                        i = 1;
+                    }
+                }
+            }
+
+            /*
+            if (((str1.Equals("LControlKey")) && (str2.Equals("LMenu")) && (str3.Equals("Delete"))))
+            {
+                i = 1;
+            
+            }
+            if (((str1.Equals("LControlKey")) && (str2.Equals("Delete")) && (str3.Equals("LMenu"))))
+            {
+                i = 1;
+
+            }
+            if (((str1.Equals("LControlKey")) && (str2.Equals("Delete")) && (str3.Equals("LMenu"))))
+            {
+                i = 1;
+
+            }
+            */
+
+            return i;
         }
 
         private void HookManager_KeyUp(object sender, KeyEventArgs e)
