@@ -42,10 +42,12 @@ namespace KeyboardMouseActivity
         {
             initializeHooks();
 
+            //buffer for detecting ctrl+alt+del
             buffer[0] = "";
             buffer[1] = "";
             buffer[2] = "";
 
+            //clearing the file of any previous content
             File.WriteAllText("d:/file.txt", String.Empty);
         }
         private void initializeHooks()
