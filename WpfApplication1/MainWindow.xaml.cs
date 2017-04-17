@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Runtime.InteropServices;
+
 namespace KeyboardMouseActivity
 {
     /// <summary>
@@ -21,6 +23,10 @@ namespace KeyboardMouseActivity
     public partial class MainWindow : Window
     {
         KeyboardMouseControl keyMouse = new KeyboardMouseControl();
+
+
+        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,6 +51,11 @@ namespace KeyboardMouseActivity
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             keyMouse.mouseEnable();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            keyMouse.lockDesktop();
         }
 
         

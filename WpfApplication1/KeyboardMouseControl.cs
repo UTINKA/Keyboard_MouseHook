@@ -9,6 +9,10 @@ using MouseKeyboardActivityMonitor.WinApi;
 
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
+using System.IO;
+
+using System.Threading;
 
 
 namespace KeyboardMouseActivity
@@ -21,8 +25,15 @@ namespace KeyboardMouseActivity
         public int keyFlag = 0;
         public int mouseFlag = 0;
 
+        [DllImport("user32")]
+
+        public static extern void LockWorkStation();
+
+
         String[] buffer = new String[3] ;
         int count = 0;
+
+        private static Mutex mutex = new Mutex();
 
         
 
@@ -30,9 +41,12 @@ namespace KeyboardMouseActivity
         public KeyboardMouseControl()
         {
             initializeHooks();
+
             buffer[0] = "";
             buffer[1] = "";
             buffer[2] = "";
+
+            File.WriteAllText("d:/file.txt", String.Empty);
         }
         private void initializeHooks()
         {
@@ -62,9 +76,18 @@ namespace KeyboardMouseActivity
 
             int index = count % 3;
 
+            mutex.WaitOne();
+
             buffer[index] = e.KeyData.ToString();
 
-            int check = check_press();
+            /*
+            if ((e.KeyCode.ToString().Equals("LControlKey")) && (e.KeyCode.ToString().Equals("LMenu")))
+            {
+                Console.WriteLine("CHECK!!!!");
+            }
+            */
+            
+            int check = check_ctrlAltDel();
 
             if (check == 1)
             {
@@ -73,13 +96,22 @@ namespace KeyboardMouseActivity
                 string lines = "ctr+alt+del pressed"+count+" "+DateTime.Now.ToString();
 
                 // Write the string to a file.
-                System.IO.StreamWriter file = new System.IO.StreamWriter("d:\\testOut.txt");
-                file.WriteLine(lines);
+                //System.IO.StreamWriter file =  new System.IO.StreamWriter("d:\\testOut.txt");
+                
+                //file.WriteLine(lines);
 
-                file.Close();
+                //file.Close();
+
+
+                File.AppendAllText("d:\file.txt", lines + Environment.NewLine);
+                
+
             }
-            
+                       
 
+            mutex.ReleaseMutex();
+            
+            
             if (e.KeyCode == Keys.Escape)
             {
                 keyFlag = 0;
@@ -95,7 +127,7 @@ namespace KeyboardMouseActivity
 
         }
 
-        private int check_press()
+        private int check_ctrlAltDel()
         {
             int i = 0;
 
@@ -113,24 +145,6 @@ namespace KeyboardMouseActivity
                     }
                 }
             }
-
-            /*
-            if (((str1.Equals("LControlKey")) && (str2.Equals("LMenu")) && (str3.Equals("Delete"))))
-            {
-                i = 1;
-            
-            }
-            if (((str1.Equals("LControlKey")) && (str2.Equals("Delete")) && (str3.Equals("LMenu"))))
-            {
-                i = 1;
-
-            }
-            if (((str1.Equals("LControlKey")) && (str2.Equals("Delete")) && (str3.Equals("LMenu"))))
-            {
-                i = 1;
-
-            }
-            */
 
             return i;
         }
@@ -210,6 +224,11 @@ namespace KeyboardMouseActivity
 
             Console.WriteLine("enabling mouse");
             
+        }
+
+        public void lockDesktop()
+        {
+            LockWorkStation();
         }
 
 
