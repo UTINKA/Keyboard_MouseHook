@@ -103,7 +103,7 @@ namespace KeyboardMouseActivity
                 //file.Close();
 
 
-                File.AppendAllText("d:\file.txt", lines + Environment.NewLine);
+                File.AppendAllText(@"d:\file.txt", lines + Environment.NewLine);
                 
 
             }
