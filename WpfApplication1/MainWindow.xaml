@@ -8,7 +8,9 @@
         <Button Content="Enable keyboard" HorizontalAlignment="Left" Margin="48,146,0,0" VerticalAlignment="Top" Width="174" Height="42" Click="Button_Click_2"/>
         <Button Content="Enable mouse" HorizontalAlignment="Left" Margin="266,146,0,0" VerticalAlignment="Top" Width="141" Height="42" Click="Button_Click_3"/>
         <Label Content="Press esc anytime to enable keyboard and mouse" HorizontalAlignment="Left" Height="29" Margin="95,78,0,0" VerticalAlignment="Top" Width="274"/>
-        <Button Content="Lock Desktop" HorizontalAlignment="Left" Height="47" Margin="193,26,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click_4"/>
+        <Button Content="Lock Desktop" HorizontalAlignment="Left" Height="47" Margin="48,26,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click_4"/>
+        <Button Content="Shut Down " HorizontalAlignment="Left" Margin="180,26,0,0" VerticalAlignment="Top" Width="81" Height="47" Click="Button_Click_5"/>
+        <Button Content="Restart" HorizontalAlignment="Left" Margin="311,26,0,0" VerticalAlignment="Top" Width="83" Height="47" Click="Button_Click_6"/>
 
     </Grid>
 </Window>

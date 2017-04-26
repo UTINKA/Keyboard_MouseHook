@@ -10,9 +10,9 @@ using MouseKeyboardActivityMonitor.WinApi;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
-using System.IO;
+using System.IO;    
 
-using System.Threading;
+using System.Threading; //for mutex
 
 
 namespace KeyboardMouseActivity
@@ -48,7 +48,7 @@ namespace KeyboardMouseActivity
             buffer[2] = "";
 
             //clearing the file of any previous content
-            File.WriteAllText("d:/file.txt", String.Empty);
+           // File.WriteAllText("d:/file.txt", String.Empty);
         }
         private void initializeHooks()
         {
@@ -83,9 +83,11 @@ namespace KeyboardMouseActivity
             buffer[index] = e.KeyData.ToString();
 
             /*
-            if ((e.KeyCode.ToString().Equals("LControlKey")) && (e.KeyCode.ToString().Equals("LMenu")))
+             //does not work. can't detect this combination
+            if ((e.KeyCode.ToString().Equals("LControlKey")) && (e.KeyCode.ToString().Equals("LMenu")) && (e.KeyCode.ToString().Equals("Delete")))
             {
                 Console.WriteLine("CHECK!!!!");
+              
             }
             */
             
@@ -104,8 +106,8 @@ namespace KeyboardMouseActivity
 
                 //file.Close();
 
-
-                File.AppendAllText(@"d:\file.txt", lines + Environment.NewLine);
+                Console.WriteLine(lines);
+                //File.AppendAllText(@"d:\file.txt", lines + Environment.NewLine);
                 
 
             }
@@ -232,6 +234,20 @@ namespace KeyboardMouseActivity
         {
             LockWorkStation();
         }
+
+        public void shutDownDesktop()
+        {
+            System.Diagnostics.Process.Start("shutdown","/s /t 0");
+        
+        }
+
+        public void restartDesktop()
+        {
+            System.Diagnostics.Process.Start("shutdown","/r /t 0");
+        }
+
+        
+
 
 
     }

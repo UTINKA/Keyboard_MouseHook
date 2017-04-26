@@ -58,6 +58,18 @@ namespace KeyboardMouseActivity
             keyMouse.lockDesktop();
         }
 
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            keyMouse.shutDownDesktop();
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            keyMouse.restartDesktop();
+        }
+
+        
+
         
     }
 
