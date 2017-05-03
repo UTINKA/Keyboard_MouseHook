@@ -23,6 +23,7 @@ namespace KeyboardMouseActivity
     public partial class MainWindow : Window
     {
         KeyboardMouseControl keyMouse = new KeyboardMouseControl();
+        DesktopControl pc = new DesktopControl();
 
 
         
@@ -55,17 +56,17 @@ namespace KeyboardMouseActivity
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            keyMouse.lockDesktop();
+            pc.lockDesktop();
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            keyMouse.shutDownDesktop();
+            pc.shutDownDesktop();
         }
 
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
-            keyMouse.restartDesktop();
+            pc.restartDesktop();
         }
 
         

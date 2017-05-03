@@ -9,7 +9,6 @@ using MouseKeyboardActivityMonitor.WinApi;
 
 using System.Windows.Forms;
 
-using System.Runtime.InteropServices;
 using System.IO;    
 
 using System.Threading; //for mutex
@@ -25,11 +24,7 @@ namespace KeyboardMouseActivity
         public int keyFlag = 0;
         public int mouseFlag = 0;
 
-        [DllImport("user32")]
-
-        public static extern void LockWorkStation();
-
-
+        
         String[] buffer = new String[3] ;
         int count = 0;
 
@@ -230,25 +225,7 @@ namespace KeyboardMouseActivity
             
         }
 
-        public void lockDesktop()
-        {
-            LockWorkStation();
-        }
-
-        public void shutDownDesktop()
-        {
-            System.Diagnostics.Process.Start("shutdown","/s /t 0");
         
-        }
-
-        public void restartDesktop()
-        {
-            System.Diagnostics.Process.Start("shutdown","/r /t 0");
-        }
-
-        
-
-
 
     }
 }
