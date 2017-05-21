@@ -16,7 +16,7 @@ using System.Threading; //for mutex
 
 namespace KeyboardMouseActivity
 {
-    class KeyboardMouseControl
+    public class KeyboardMouseControl
     {
         private KeyboardHookListener m_KeyboardHookManager;
         private MouseHookListener m_MouseHookManager;
@@ -225,6 +225,23 @@ namespace KeyboardMouseActivity
             
         }
 
+        public void LockMouse() { mouseDisable(); }
+        public void UnlockMouse() { mouseEnable(); }
+        public void LockKeyboard() { keyDisable(); }
+        public void UnlockKeyboard() { keyEnable(); }
+        public void LockAll() {
+
+            LockKeyboard();
+            LockMouse();
+
+        }
+
+        public void UnlockAll() {
+
+            UnlockKeyboard();
+            UnlockMouse();
+
+        }
         
 
     }

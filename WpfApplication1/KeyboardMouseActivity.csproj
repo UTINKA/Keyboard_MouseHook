@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mousekeyboardactivitymonitor">
-      <HintPath>..\..\..\..\..\Downloads\mousekeyboardactivitymonitor.dll</HintPath>
+      <HintPath>lib\mousekeyboardactivitymonitor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
