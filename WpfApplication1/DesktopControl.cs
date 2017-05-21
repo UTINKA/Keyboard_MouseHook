@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace KeyboardMouseActivity
 {
-    class DesktopControl
+    public class DesktopControl
     {
         [DllImport("user32")]
         public static extern void LockWorkStation();
@@ -26,6 +26,8 @@ namespace KeyboardMouseActivity
 
         public void restartDesktop()
         {
+
+            // TODO restart?
             System.Diagnostics.Process.Start("shutdown", "/r /t 0");
         }
 
