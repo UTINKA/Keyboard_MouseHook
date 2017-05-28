@@ -11,8 +11,6 @@ using System.Windows.Forms;
 
 using System.IO;    
 
-using System.Threading; //for mutex
-
 
 namespace KeyboardMouseActivity
 {
@@ -28,22 +26,11 @@ namespace KeyboardMouseActivity
         String[] buffer = new String[3] ;
         int count = 0;
 
-        private static Mutex mutex = new Mutex();
-
-        
-
-
+     
         public KeyboardMouseControl()
         {
             initializeHooks();
 
-            //buffer for detecting ctrl+alt+del
-            buffer[0] = "";
-            buffer[1] = "";
-            buffer[2] = "";
-
-            //clearing the file of any previous content
-           // File.WriteAllText("d:/file.txt", String.Empty);
         }
         private void initializeHooks()
         {
@@ -70,47 +57,7 @@ namespace KeyboardMouseActivity
         {
 
             Console.WriteLine(e.KeyData.ToString() + " Pressed");
-
-            int index = count % 3;
-
-            mutex.WaitOne();
-
-            buffer[index] = e.KeyData.ToString();
-
-            /*
-             //does not work. can't detect this combination
-            if ((e.KeyCode.ToString().Equals("LControlKey")) && (e.KeyCode.ToString().Equals("LMenu")) && (e.KeyCode.ToString().Equals("Delete")))
-            {
-                Console.WriteLine("CHECK!!!!");
-              
-            }
-            */
-            
-            int check = check_ctrlAltDel();
-
-            if (check == 1)
-            {
-                Console.WriteLine("hello there!!!!!!!!!!!!!!");
-                // Compose a string that consists of three lines.
-                string lines = "ctr+alt+del pressed"+count+" "+DateTime.Now.ToString();
-
-                // Write the string to a file.
-                //System.IO.StreamWriter file =  new System.IO.StreamWriter("d:\\testOut.txt");
-                
-                //file.WriteLine(lines);
-
-                //file.Close();
-
-                Console.WriteLine(lines);
-                //File.AppendAllText(@"d:\file.txt", lines + Environment.NewLine);
-                
-
-            }
-                       
-
-            mutex.ReleaseMutex();
-            
-            
+           
             if (e.KeyCode == Keys.Escape)
             {
                 keyFlag = 0;
@@ -126,27 +73,6 @@ namespace KeyboardMouseActivity
 
         }
 
-        private int check_ctrlAltDel()
-        {
-            int i = 0;
-
-            String str1 = buffer[0];
-            String str2 = buffer[1];
-            String str3 = buffer[2];
-
-            if (str1.Equals("LControlKey") || str2.Equals("LControlKey") || str3.Equals("LControlKey"))
-            {
-                if (str1.Equals("LMenu") || str2.Equals("LMenu") || str3.Equals("LMenu"))
-                {
-                    if (str1.Equals("Delete") || str2.Equals("Delete") || str3.Equals("Delete"))
-                    {
-                        i = 1;
-                    }
-                }
-            }
-
-            return i;
-        }
 
         private void HookManager_KeyUp(object sender, KeyEventArgs e)
         {
