@@ -26,8 +26,6 @@ namespace KeyboardMouseActivity
 
         public void restartDesktop()
         {
-
-            // TODO restart?
             System.Diagnostics.Process.Start("shutdown", "/r /t 0");
         }
 
