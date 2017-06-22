@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace KeyboardMouseActivity
 {
-    class DesktopControl
+    public class DesktopControl
     {
         [DllImport("user32")]
         public static extern void LockWorkStation();
