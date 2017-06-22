@@ -35,23 +35,32 @@ namespace KeyboardMouseActivity
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
             keyMouse.keyDisable();
             
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            
             keyMouse.mouseDisable();
+
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            
             keyMouse.keyEnable();
+
+            
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            
             keyMouse.mouseEnable();
+
+            
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
