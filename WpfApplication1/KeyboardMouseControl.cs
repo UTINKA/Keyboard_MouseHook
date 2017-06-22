@@ -9,154 +9,120 @@ using MouseKeyboardActivityMonitor.WinApi;
 
 using System.Windows.Forms;
 
-using System.IO;    
+using System.IO;
 
-using System.Threading; //for mutex
+using System.Collections;
 
 
 namespace KeyboardMouseActivity
 {
-    public class KeyboardMouseControl
+    class KeyboardMouseControl
     {
         private KeyboardHookListener m_KeyboardHookManager;
         private MouseHookListener m_MouseHookManager;
 
-        public int keyFlag = 0;
-        public int mouseFlag = 0;
+        bool escDown = false;
 
-        
-        String[] buffer = new String[3] ;
-        int count = 0;
-
-        private static Mutex mutex = new Mutex();
-
-        
+        int keyFlag = 0;
 
 
-        public KeyboardMouseControl()
+        private void InitiateKeyboardHook()
         {
-            initializeHooks();
-
-            //buffer for detecting ctrl+alt+del
-            buffer[0] = "";
-            buffer[1] = "";
-            buffer[2] = "";
-
-            //clearing the file of any previous content
-           // File.WriteAllText("d:/file.txt", String.Empty);
-        }
-        private void initializeHooks()
-        {
-
-            Console.WriteLine("init hook");
-
+            if (m_KeyboardHookManager != null)
+                return;
 
             m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
+
             m_KeyboardHookManager.Enabled = true;
+
             m_KeyboardHookManager.KeyDown += HookManager_KeyDown;
             m_KeyboardHookManager.KeyUp += HookManager_KeyUp;
+        }
 
+        private void RemoveKeyboardHook()
+        {
+            if (m_KeyboardHookManager == null)
+                return;
 
+            m_KeyboardHookManager.Enabled = false;
+
+            m_KeyboardHookManager.KeyDown -= HookManager_KeyDown;
+            m_KeyboardHookManager.KeyUp -= HookManager_KeyUp;
+
+            m_KeyboardHookManager = null;
+        }
+
+        
+        private void InitiateMouseHook()
+        {
+            if (m_MouseHookManager != null)
+                return;
 
             m_MouseHookManager = new MouseHookListener(new GlobalHooker());
+
             m_MouseHookManager.Enabled = true;
+
             m_MouseHookManager.MouseDownExt += HookManager_MouseDown;
             m_MouseHookManager.MouseUp += HookManager_MouseUp;
-
-
         }
+        
+        private void RemoveMouseHook()
+        {
+            if (m_MouseHookManager == null)
+                return;
+
+            m_MouseHookManager.Enabled = false;
+
+            m_MouseHookManager.MouseDownExt -= HookManager_MouseDown;
+            m_MouseHookManager.MouseUp -= HookManager_MouseUp;
+
+            m_MouseHookManager = null;
+        }
+
 
         private void HookManager_KeyDown(object sender, KeyEventArgs e)
         {
 
             Console.WriteLine(e.KeyData.ToString() + " Pressed");
-
-            int index = count % 3;
-
-            mutex.WaitOne();
-
-            buffer[index] = e.KeyData.ToString();
-
-            /*
-             //does not work. can't detect this combination
-            if ((e.KeyCode.ToString().Equals("LControlKey")) && (e.KeyCode.ToString().Equals("LMenu")) && (e.KeyCode.ToString().Equals("Delete")))
-            {
-                Console.WriteLine("CHECK!!!!");
-              
-            }
-            */
+                        
             
-            int check = check_ctrlAltDel();
-
-            if (check == 1)
+            if (e.KeyCode==Keys.Escape && escDown==false)
             {
-                Console.WriteLine("hello there!!!!!!!!!!!!!!");
-                // Compose a string that consists of three lines.
-                string lines = "ctr+alt+del pressed"+count+" "+DateTime.Now.ToString();
 
-                // Write the string to a file.
-                //System.IO.StreamWriter file =  new System.IO.StreamWriter("d:\\testOut.txt");
+                escDown = true;
+
+                Console.WriteLine("PUSHING in ESC:Value:"+escDown);
                 
-                //file.WriteLine(lines);
-
-                //file.Close();
-
-                Console.WriteLine(lines);
-                //File.AppendAllText(@"d:\file.txt", lines + Environment.NewLine);
-                
-
             }
-                       
 
-            mutex.ReleaseMutex();
-            
-            
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.G && escDown==true)
             {
-                keyFlag = 0;
-                mouseFlag = 0;
+                Console.WriteLine("PRESSED G while ESC is down");
+
+                keyEnable();
+                mouseEnable();
+                        
             }
 
+            
             if (keyFlag == 1)
             {
                 e.SuppressKeyPress = true;
             }
 
-            count++;
-
         }
 
-        private int check_ctrlAltDel()
-        {
-            int i = 0;
-
-            String str1 = buffer[0];
-            String str2 = buffer[1];
-            String str3 = buffer[2];
-
-            if (str1.Equals("LControlKey") || str2.Equals("LControlKey") || str3.Equals("LControlKey"))
-            {
-                if (str1.Equals("LMenu") || str2.Equals("LMenu") || str3.Equals("LMenu"))
-                {
-                    if (str1.Equals("Delete") || str2.Equals("Delete") || str3.Equals("Delete"))
-                    {
-                        i = 1;
-                    }
-                }
-            }
-
-            return i;
-        }
 
         private void HookManager_KeyUp(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.KeyData.ToString() + " Released");
 
-            if (e.KeyCode == Keys.Escape)
-            {
-                keyFlag = 0;
-                mouseFlag = 0;
+            if (e.KeyCode == Keys.Escape && escDown==true)
+            {                
+                escDown = false;
+                Console.WriteLine("Poping ESC:Value:"+escDown);
             }
+
             
             if (keyFlag == 1)
             {
@@ -171,35 +137,33 @@ namespace KeyboardMouseActivity
             Console.WriteLine(e.Button.ToString() + " Released");
             //   e.Handled = true;
             
-
-
         }
 
         private void HookManager_MouseDown(object sender, MouseEventExtArgs e)
         {
             Console.WriteLine(e.Button.ToString() + " Pressed");
-            //e.Handled = true;
-
-            if (mouseFlag == 1)
-            {
-                e.Handled = true;
-            }
+            
+            e.Handled = true;
+           
 
         }
 
+        
         public void keyDisable()
         {
+
+            InitiateKeyboardHook();
 
             keyFlag = 1;
 
             Console.WriteLine("disabling keyboard");
-
-
-
+            
         }
-
+        
         public void keyEnable()
         {
+            RemoveKeyboardHook();
+
             keyFlag = 0;
 
             Console.WriteLine("enabling key");
@@ -209,40 +173,27 @@ namespace KeyboardMouseActivity
         public void mouseDisable()
         {
 
-            mouseFlag = 1;
-
+            InitiateMouseHook();
+            InitiateKeyboardHook();
+            
             Console.WriteLine("disabling mouse");
-
-
 
         }
 
         public void mouseEnable()
         {
-            mouseFlag = 0;
+
+            RemoveMouseHook();
+            
+            if (keyFlag == 0)
+            {
+                RemoveKeyboardHook();
+            }
 
             Console.WriteLine("enabling mouse");
             
         }
 
-        public void LockMouse() { mouseDisable(); }
-        public void UnlockMouse() { mouseEnable(); }
-        public void LockKeyboard() { keyDisable(); }
-        public void UnlockKeyboard() { keyEnable(); }
-        public void LockAll() {
-
-            LockKeyboard();
-            LockMouse();
-
-        }
-
-        public void UnlockAll() {
-
-            UnlockKeyboard();
-            UnlockMouse();
-
-        }
-        
-
+       
     }
 }
